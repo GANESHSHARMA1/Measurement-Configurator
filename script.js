@@ -71,4 +71,31 @@ document.addEventListener("mouseup", () => {
   activeLine = null;
 });
 
+line2.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  activeLine = line2;
+  e.preventDefault();
+});
+
+document.addEventListener("touchmove", (e) => {
+  if (isDragging && activeLine) {
+    const containerRect = container.getBoundingClientRect();
+    let newY = e.touches[0].clientY - containerRect.top;
+
+    if (newY < 0) newY = 0;
+    if (newY > containerRect.height - activeLine.offsetHeight) {
+      newY = containerRect.height - activeLine.offsetHeight;
+    }
+
+    activeLine.style.top = `${newY}px`;
+    calculateDistance();
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("touchend", () => {
+  isDragging = false;
+  activeLine = null;
+});
+
 calculateDistance();
